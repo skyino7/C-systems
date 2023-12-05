@@ -116,7 +116,7 @@ void build_http_response(const char *file_name, const char *file_ext, char *resp
     {
         snprintf(response, BUFFER_SIZE, "HTTP/1.1 404 Not Found\r\n"
                                     "Content-Type: text/plain\r\n"
-                                    "\r\n",
+                                    "\r\n"
                                     "404 Not Found");
         *response_len = strlen(response);
         return;
@@ -178,14 +178,14 @@ void *handle_client(void *arg)
     return (NULL);
 }
 
-int main(int argc, const *argv[])
+int main(int argc, char *argv[])
 {
     int server_fd;
     struct sockaddr_in server_addr;
 
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
-        perror("socket filed");
+        perror("socket failed");
         exit(EXIT_FAILURE);
     }
 
@@ -213,9 +213,9 @@ int main(int argc, const *argv[])
         socklen_t client_addr_len = sizeof(client_addr);
         int *client_fd = malloc(sizeof(int));
 
-        if ((client_fd = accept(server_fd, (struct sockaddr *)&client_addr, client_addr_len)) < 0)
+        if ((*client_fd = accept(server_fd, (struct sockaddr *)&client_addr, &client_addr_len)) < 0)
         {
-            perror("listen failed");
+            perror("accept failed");
             continue;
         }
 
